@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+// import PedidoVentaModel
+use App\Models\PedidoVentaModel;
 
 class Product extends Model
 {
@@ -31,4 +33,9 @@ class Product extends Model
     public function seller() {
         return $this->belongsTo(Seller::class);
     }
+
+    public function PedidoVenta() {
+        return $this->belongsToMany(PedidoVentaModel::class);
+    }
+
 }

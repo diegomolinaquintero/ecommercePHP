@@ -1,0 +1,13 @@
+{
+    "email": "pepito@pepito.com",
+    "producto" : [
+        {
+            "product_id": 1,
+            "cantidad": 100
+        },
+        {
+            "product_id": 2,
+            "cantidad": 200
+        }
+    ]
+}

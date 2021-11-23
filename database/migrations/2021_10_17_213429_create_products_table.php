@@ -14,7 +14,7 @@ class CreateProductsTable extends Migration
     public function up()
     {
         Schema::create('products', function (Blueprint $table) {
-            $table->id();
+            $table->bigIncrements('id');
             $table->foreignId('category_id')->constrained('categories')->onDelete('cascade');
             $table->foreignId('brand_id')->constrained('brands')->onDelete('cascade');
             $table->string('name');
@@ -23,7 +23,7 @@ class CreateProductsTable extends Migration
             $table->double('price');
             $table->integer('inventory');
             $table->foreignId('seller_id')->constrained('sellers')->onDelete('cascade');
-            $table->timestamps();
+            $table->timestamps();  
         });
     }
 
