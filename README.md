@@ -1,64 +1,92 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+<!-- <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p> -->
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
+<!-- <p align="center"> -->
+<!-- <a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+</p> -->
 
-## About Laravel
+## Como iniciar
+*debes tener instalado Composer y npm
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+#####usa la terminal de VS Code para no perder tiempo
+- Clonar el repositorio de git
+- Composer require facade/ignition
+- sudo apt-get install php7.4-curl
+- Composer install
+- Reivas si eciste el archivo llamdo .env de lo contrario
+    -cp .env.example .env
+- php artisan key:generate
+    -vamos configurar la base de datos postgres si usas linux habilita en el php.ini el modulo de postgres
+        - revisa el .env y escribe estos valores (crea una base de datos llamada MVCTarea y un super usuario llamado igual con password 123)
+        DB_CONNECTION=pgsql
+        DB_HOST=127.0.0.1
+        DB_PORT=5432
+        DB_DATABASE=MVCTarea
+        DB_USERNAME=MVCTarea
+        DB_PASSWORD=123
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- php artisan cache:clear && php artisan view:clear && php artisan migrate:refresh --seed
+- luego ejecuta en postgres el archivo sqlPostgres.sql para ingresar los datos iniciales
+- Si no deseas usar link simbolico 
+    -php artisan serve
+- disfruta del uso web de la aplicacion.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Usar la Api
 
-## Learning Laravel
+Debes tener tiendas, vendedores y productos registrados. hacer esto se hace de forma facil:
+    -Ingresa http://127.0.0.1:8000/  (varia segun tus preferencias en el compu)
+    - Ingresa con el usuario admin@admin.com con contrase;a 123456789
+        -con el admin crea tiendas y usuarios
+    - Ingresa con un usuario creado anteriormente, diferente a admin
+        -crea productos con este usuario intenta crear varios
+        - si tienes tiempo crea productos con los otros usuaios
+Luego de tener todo registrado podemos usar postman o mi favorito Thunder client para vs code
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+prueba que te funsiona escribiendo:
+    -http://127.0.0.1:8000/api/product con metodo get
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+SI esto te funciona es hora de mandar un post:
+    - 
+    ~~~
+    {
+        "email": "pepito@pepito.com",
+        "producto" : [
+            {
+                "product_id": 1,
+                "cantidad": 100
+            },
+            {
+                "product_id": 2,
+                "cantidad": 200
+            }
+        ]
+    }
+    ~~~
+Para mandar ese JSON la url en metodo post es http://127.0.0.1:8000/api/order
 
-## Laravel Sponsors
+## C'omo se crea un pedido
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+Se agregan dos tablas una llamada pedidos donde se guarda el email con un id y fecha de cada pedido.
+tambien se agrega una tabla llamada pedidos_productos donde se relacion el pedido con el producto la cantidad.
 
-### Premium Partners
+Asi podemos tener un registro historico de los pedidos.
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[CMS Max](https://www.cmsmax.com/)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
+La ruta post http://127.0.0.1:8000/api/order nos envia al controlador Api donde creamos toda la logica necesaria
+
+
 
 ## Contributing
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Si alguien quiere descargar es totalmente libre puede modifcar y escribir para poder hacer realese
 
 ## Code of Conduct
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Descargalo y usalo, esto es educativo, me sirve para practicar y espero que para ti tambien.      
 
-## Security Vulnerabilities
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Este ecommers is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
