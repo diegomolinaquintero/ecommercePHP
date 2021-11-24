@@ -9,8 +9,7 @@
 
 ## Como iniciar
 *debes tener instalado Composer y npm
-
-#####usa la terminal de VS Code para no perder tiempo
+Usa la terminal de VS Code para no perder tiempo
 - Clonar el repositorio de git
 - Composer require facade/ignition
 - sudo apt-get install php7.4-curl
