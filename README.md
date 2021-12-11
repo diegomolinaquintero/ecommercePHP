@@ -48,7 +48,7 @@ prueba que te funsiona escribiendo:
     -http://127.0.0.1:8000/api/product con metodo get
 
 SI esto te funciona es hora de mandar un post:
-    - 
+
     ~~~
     {
         "email": "pepito@pepito.com",

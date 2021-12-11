@@ -24,6 +24,7 @@ Route::get('product', [ProductApiController::class, 'index']);
 Route::get('product/{id}', [ProductApiController::class, 'getById']);
 // ruta pedidos
 Route::post('order', [ProductApiController::class, 'pedido']);
+Route::post('ver/order', [ProductApiController::class, 'Verpedido']);
 
 
 Route::post('oauth/token', 'Laravel\Passport\Http\Controllers\AccessTokenController@issueToken');

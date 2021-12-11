@@ -70,12 +70,17 @@ class ProductApiController extends Controller
                             // $pedido_id = $pedido->id; 
                             // dd($pedido->id);
                             $productofind = Product::where('id', $pedido_producto['product_id'])->first();
-    
-                            if($productofind->inventory < $pedido_producto['cantidad']){
-                                return response()->json('No hay suficiente inventario de '.$productofind->name , 200);
-                            }else {
-                                $productofind->inventory = $productofind->inventory - $pedido_producto['cantidad'];
-                                $productofind->save();
+                            try {
+                                //code...
+                                if($productofind->inventory < $pedido_producto['cantidad']){
+                                    return response()->json('No hay suficiente inventario de '.$productofind->name , 200);
+                                }else {
+                                    $productofind->inventory = $productofind->inventory - $pedido_producto['cantidad'];
+                                    $productofind->save();
+                                }
+                            } catch (\Throwable $th) {
+                                //throw $th;
+                                return response()->json('Error con el inventario intentalo otra vez'.$th, 200);
                             }
     
                             $pedido_product = (new PedidoVentaModel())->forceFill([
@@ -95,6 +100,62 @@ class ProductApiController extends Controller
                 return response()->json('No se guardo verifica el correo', 200);
             }
             //code...
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json('No se guardo ningun cambio al sistema'.$th, 200);
+        }
+        
+
+    }
+    public function Verpedido (Request $request)
+    {
+        $input = (object) $request->all();
+        // dd($input);
+        
+        $array_files_validacion = [
+            'email' => ['required', 'email'],
+        ];
+
+        
+        $validator = Validator::make((array) $input, $array_files_validacion);
+        // dd($validator);
+
+        if ($validator->fails()) {
+            return response()->json('Revisar'.' - '.$validator->errors(), 200);
+
+        }
+
+        try {
+            $pedidos = PedidoModel::where('email', $request->email)->get();
+            if($pedidos) {
+                $ArrayPedidos = [];
+                $productos = [];
+                foreach($pedidos as $pedido){
+                    $pedido_productos = PedidoVentaModel::where('pedido_id', $pedido->id)->orderBy('pedido_id', 'desc')->get();
+                    foreach($pedido_productos as $pedido_producto){
+                        $producto = Product::where('id', $pedido_producto->product_id)->first();
+                        $productos[] = [
+                            'id' => $producto->id,
+                            'name' => $producto->name,
+                            'price' => $producto->price,
+                            'cantidad' => $pedido_producto->cantidad,
+                            'total' => $producto->price * $pedido_producto->cantidad,
+                        ];
+                    };
+                    $ArrayPedidos[] = [
+                        'id' => $pedido->id,
+                        'email' => $pedido->email,
+                        'created_at' => $pedido->created_at->format('d.m.Y'),
+                        'productos' => $productos,
+                    ];
+                    $productos = [];
+                    
+                }
+                return response()->json($ArrayPedidos, 200);
+            }else {
+                return response()->json('No hay pedido', 200);
+            }
+            // code...
         } catch (\Throwable $th) {
             //throw $th;
             return response()->json('No se guardo ningun cambio al sistema'.$th, 200);
